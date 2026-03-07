@@ -57,6 +57,7 @@ export const Video: React.FC = () => {
               segment={segment}
               allCharacters={scriptData.characters}
               currentDisplay={currentDisplay}
+              voiceVolume={scriptData.voiceVolume ?? 1.0}
             />
           </Sequence>
         );

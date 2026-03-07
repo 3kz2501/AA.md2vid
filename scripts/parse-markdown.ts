@@ -275,7 +275,7 @@ function findManuscriptFile(arg?: string): string {
 
   // 新ディレクトリ構造を優先
   if (fs.existsSync(MANUSCRIPTS_DIR)) {
-    const files = fs.readdirSync(MANUSCRIPTS_DIR).filter(f => f.endsWith(".md"));
+    const files = fs.readdirSync(MANUSCRIPTS_DIR).filter(f => f.endsWith(".md") && !f.startsWith("_"));
     if (files.length > 0) {
       return path.join(MANUSCRIPTS_DIR, files[0]);
     }
@@ -283,7 +283,7 @@ function findManuscriptFile(arg?: string): string {
 
   // フォールバック: 旧ディレクトリ
   if (fs.existsSync(LEGACY_MANUSCRIPTS_DIR)) {
-    const files = fs.readdirSync(LEGACY_MANUSCRIPTS_DIR).filter(f => f.endsWith(".md"));
+    const files = fs.readdirSync(LEGACY_MANUSCRIPTS_DIR).filter(f => f.endsWith(".md") && !f.startsWith("_"));
     if (files.length > 0) {
       return path.join(LEGACY_MANUSCRIPTS_DIR, files[0]);
     }
@@ -358,6 +358,7 @@ async function main() {
     characters,
     bgm: frontmatter.bgm,
     bgmVolume: config.bgm?.volume ?? 0.15,
+    voiceVolume: (config as any).audio?.voiceVolume ?? 1.0,
     segments,
     totalDurationInFrames: totalFrames,
   };

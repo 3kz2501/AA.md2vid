@@ -111,18 +111,44 @@ npx @marp-team/marp-cli input/slides/example.md --images png -o input/slides/exa
 
 出力: `input/slides/example/slide_001.png`, `slide_002.png`, ...
 
-### Step 5: 音声生成 & 動画レンダリング
+### Step 5: プリプロセス（必須）
 
 ```bash
 # プリプロセス（台本パース + 音声生成）
 npm run preprocess -- --manuscript example
+```
 
+**プリプロセスの処理内容:**
+1. 指定した台本（`input/manuscripts/example.md`）をパース
+2. VOICEVOXで各セリフの音声ファイルを生成（`public/voices/`）
+3. スクリプトデータを出力（`src/data/script.ts`）
+
+> **Note**: 台本が1つだけの場合は `--manuscript` 省略可。`_` で始まるファイル（テンプレート等）は自動選択から除外されます。
+
+> **重要**: プリプロセスは **プレビュー（studio）・レンダリング（render）の両方で必須** です。台本を変更した場合も再度プリプロセスが必要です。
+
+### Step 6: プレビュー & レンダリング
+
+```bash
 # プレビュー（Remotion Studio）
 npm run studio
+# → ブラウザで http://localhost:3000 が開く
 
 # 動画レンダリング
 npm run render
 # → out/video.mp4 に出力
+```
+
+**studio / render はどちらも preprocess で生成されたデータを使用します。** 別の台本に切り替えたい場合は、先に `preprocess` を実行してください。
+
+### レンダリングオプション
+
+```bash
+# GPU エンコード + 並列処理
+npx remotion render Video out/video.mp4 --hardware-acceleration=if-possible --concurrency=8
+
+# 出力ファイル名を指定
+npx remotion render Video out/my_video.mp4
 ```
 
 ### 一括実行
@@ -130,6 +156,8 @@ npm run render
 ```bash
 npm run build
 ```
+
+> `build` は `parse-mlt → preprocess → render` を順に実行します。台本が複数ある場合は最初に見つかったものが使われます。
 
 ## 台本フォーマット
 

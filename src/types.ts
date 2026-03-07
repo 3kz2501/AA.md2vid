@@ -130,6 +130,7 @@ export interface ScriptData {
   characters: ScriptCharacter[];
   bgm?: string;
   bgmVolume?: number;
+  voiceVolume?: number;
   segments: Segment[];
   totalDurationInFrames: number;
 }

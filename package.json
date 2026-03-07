@@ -19,7 +19,7 @@
     "parse-md": "tsx scripts/parse-markdown.ts",
     "voices": "tsx scripts/generate-voices.ts",
     "studio": "npx remotion studio",
-    "render": "npx remotion render Video out/video.mp4",
+    "render": "npx remotion render Video out/video.mp4 --hardware-acceleration=if-possible --concurrency=8",
     "build": "npm run parse-mlt && npm run preprocess && npm run render"
   },
   "dependencies": {

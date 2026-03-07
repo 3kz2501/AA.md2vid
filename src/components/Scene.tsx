@@ -9,12 +9,14 @@ interface SceneProps {
   segment: Segment;
   allCharacters: ScriptCharacter[];
   currentDisplay: string[] | null;
+  voiceVolume: number;
 }
 
 export const Scene: React.FC<SceneProps> = ({
   segment,
   allCharacters,
   currentDisplay,
+  voiceVolume,
 }) => {
   const frame = useCurrentFrame();
   const isSpeaking = frame < segment.durationInFrames;
@@ -101,7 +103,7 @@ export const Scene: React.FC<SceneProps> = ({
 
       {/* 音声 */}
       {segment.durationInFrames > 0 && (
-        <Audio src={staticFile(segment.voiceFile)} />
+        <Audio src={staticFile(segment.voiceFile)} volume={voiceVolume} />
       )}
     </div>
   );
