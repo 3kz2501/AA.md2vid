@@ -1,0 +1,121 @@
+# 2ch キャラ動画メーカー 設定ファイル
+
+# VOICEVOX 設定
+voicevox:
+  # VOICEVOX エンジンのエンドポイント
+  endpoint: "http://localhost:50021"
+  # デフォルトの音声パラメータ
+  defaults:
+    speedScale: 1.0
+    pitchScale: 0.0
+    intonationScale: 1.0
+    volumeScale: 1.0
+
+audio:
+  voiceVolume: 1.3
+# 動画出力設定
+video:
+  width: 1920
+  height: 1080
+  fps: 30
+  # セリフ間の無音フレーム数
+  pauseAfterDefault: 10
+  # 出力ディレクトリ
+  outputDir: "./out"
+
+# フォント設定
+fonts:
+  # AA表示用フォント（aahub_light を使用）
+  aa:
+    family: "aahub_light"
+    file: "public/fonts/aahub_light.woff2"
+    size: 19
+    lineHeight: 1.3
+  # 字幕用フォント（Noto Sans JP - 商用無料）
+  subtitle:
+    family: "Noto Sans JP"
+    # Google Fontsから読み込み
+    googleFonts: true
+    weight: 700
+    size: 34
+
+# キャラクター設定
+characters:
+  yaruo:
+    displayName: "やる夫"
+    # VOICEVOX 話者ID (ずんだもん ノーマル)
+    voiceId: 3
+    # 立ち位置（伝統的なAAスレでは左側）
+    direction: "left"
+    # AAソース (パーツ合成方式)
+    aaType: "parts"
+    aaSource: "characters/yaruo.json"
+    # 音声パラメータ（voicevox.defaults を上書き）
+    voiceParams:
+      speedScale: 1.0
+      pitchScale: 0.0
+
+  yaranai:
+    displayName: "やらない夫"
+    # VOICEVOX 話者ID (玄野武宏 ノーマル)
+    voiceId: 11
+    # 伝統的なAAスレでは右側
+    direction: "right"
+    # AAソース (全身差し替え方式)
+    aaType: "fullbody"
+    aaSource: "characters/yaranai.json"
+    voiceParams:
+      speedScale: 1.0
+      pitchScale: 0.0
+
+# 感情自動検出キーワード
+emotionKeywords:
+  happy:
+    - "嬉しい"
+    - "楽しい"
+    - "やった"
+    - "最高"
+    - "すごい"
+    - "！！"
+    - "お" # やる夫の語尾
+  sad:
+    - "悲しい"
+    - "辛い"
+    - "切ない"
+  cry:
+    - "涙が出"
+    - "号泣"
+    - "うえーん"
+  angry:
+    - "怒"
+    - "ふざけるな"
+    - "許さない"
+  surprised:
+    - "え？"
+    - "まさか"
+    - "！？"
+    - "マジか"
+  troubled:
+    - "困"
+    - "うーん"
+    - "どうしよう"
+  shy:
+    - "照"
+    - "恥ずかし"
+    - "えへへ"
+    - "///"
+
+# BGM設定
+bgm:
+  volume: 0.15
+  fadeOutDuration: 30 # フレーム数
+
+# 背景設定
+background:
+  color: "#0a0a1a"
+  # スライドパネル設定
+  slidePanel:
+    backgroundColor: "rgba(255, 255, 255, 0.95)"
+    textColor: "#333"
+    padding: 40
+    borderRadius: 20

@@ -1,0 +1,67 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+out/
+
+# Generated files
+public/voices/*
+!public/voices/.gitkeep
+src/data/script.ts
+
+# Input content (keep directories only)
+input/manuscripts/*
+!input/manuscripts/.gitkeep
+!input/manuscripts/_template.md
+input/images/*
+!input/images/.gitkeep
+input/slides/*
+!input/slides/.gitkeep
+
+# Public assets (keep directories only, except fonts)
+public/bgm/*
+!public/bgm/.gitkeep
+
+# Development docs
+docs/
+
+# Character MLT (development)
+characters/mlt/
+
+# Backups
+*.backup
+
+# Screenshots (temp)
+screenshots/
+
+# VOICEVOX Engine (large binaries)
+VOICEVOX/
+
+# Claude Code
+.claude/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Remotion
+.remotion/
+
+# Zone.Identifier (Windows)
+*:Zone.Identifier

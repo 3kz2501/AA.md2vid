@@ -1,0 +1,40 @@
+{
+  "name": "aa-md2vid",
+  "version": "1.0.0",
+  "description": "Markdownで台本を書くだけで、やる夫・やらない夫が掛け合いする解説動画を自動生成",
+  "author": "3kz2501",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/3kz2501/AA.md2vid.git"
+  },
+  "homepage": "https://github.com/3kz2501/AA.md2vid#readme",
+  "bugs": {
+    "url": "https://github.com/3kz2501/AA.md2vid/issues"
+  },
+  "type": "module",
+  "scripts": {
+    "preprocess": "tsx scripts/parse-markdown.ts && tsx scripts/generate-voices.ts",
+    "parse-mlt": "tsx scripts/parse-mlt.ts",
+    "parse-md": "tsx scripts/parse-markdown.ts",
+    "voices": "tsx scripts/generate-voices.ts",
+    "studio": "npx remotion studio",
+    "render": "npx remotion render Video out/video.mp4",
+    "build": "npm run parse-mlt && npm run preprocess && npm run render"
+  },
+  "dependencies": {
+    "@remotion/cli": "^4.0.0",
+    "gray-matter": "^4.0.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "remotion": "^4.0.0",
+    "yaml": "^2.3.4"
+  },
+  "devDependencies": {
+    "@marp-team/marp-cli": "^4.2.3",
+    "@types/node": "^20.10.0",
+    "@types/react": "^18.2.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.0"
+  }
+}
