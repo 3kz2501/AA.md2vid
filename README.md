@@ -16,6 +16,14 @@ Markdownで台本を書くだけで、やる夫・やらない夫が掛け合い
   <img src="docs/images/demo.gif" width="600" alt="Demo">
 </p>
 
+## Claude Codeでの利用
+
+[Claude Code](https://claude.ai/code)を使用する場合、「〇〇について解説動画を作って」のようにテーマを伝えるだけで、スライド・台本作成からレンダリングまで一括で依頼できます。
+
+詳細は [CLAUDE.md](./CLAUDE.md) を参照してください。
+
+> **Note**: 動作保証はしません。生成結果は適宜確認・修正してください。
+
 ## 必要環境
 
 - **Node.js** 18以上
@@ -135,10 +143,10 @@ Marp CLIでスライドをPNG画像に変換します。
 > **Note**: Marp CLIは絶対パスが必要です。
 
 ```bash
-npx @marp-team/marp-cli "$(pwd)/input/slides/example.md" --images png -o "$(pwd)/input/slides/example/slide"
+npx @marp-team/marp-cli --no-stdin "$(pwd)/input/slides/example.md" --images png -o "$(pwd)/input/slides/example/slide.png"
 ```
 
-出力: `input/slides/example/slide_001.png`, `slide_002.png`, ...
+出力: `input/slides/example/slide.001.png`, `slide.002.png`, ...
 
 - 出力されたPNG のスライド番号を台本の中で関連する会話の手前に`@slide1` のように記載すると画面中央にスライドが表示されます。
 

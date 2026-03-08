@@ -56,6 +56,17 @@ export function parseSlides(filePath: string): SlideData {
   const slideDir = filePath.replace(/\.md$/, "");
   const hasSlideImages = fs.existsSync(slideDir);
 
+  // スライド画像の命名形式を検出（最初に見つかった形式で統一）
+  // 優先: slide.001.png (Marp CLI default) > slide_001.png
+  let slideImageFormat: "dot" | "underscore" | null = null;
+  if (hasSlideImages) {
+    if (fs.existsSync(path.join(slideDir, "slide.001.png"))) {
+      slideImageFormat = "dot";
+    } else if (fs.existsSync(path.join(slideDir, "slide_001.png"))) {
+      slideImageFormat = "underscore";
+    }
+  }
+
   const slides: SlideContent[] = slideBlocks.map((block, index) => {
     const lines = block.trim().split("\n");
     const slideNumber = index + 1;
@@ -75,11 +86,12 @@ export function parseSlides(filePath: string): SlideData {
     // 画像を抽出
     const images = extractImages(block);
 
-    // Marp生成画像を検出
+    // Marp生成画像を検出（検出した形式で統一）
     let slideImage: string | undefined;
-    if (hasSlideImages) {
+    if (slideImageFormat) {
       const paddedNum = String(slideNumber).padStart(3, "0");
-      const imgPath = path.join(slideDir, `slide_${paddedNum}.png`);
+      const separator = slideImageFormat === "dot" ? "." : "_";
+      const imgPath = path.join(slideDir, `slide${separator}${paddedNum}.png`);
       if (fs.existsSync(imgPath)) {
         // input/ からの相対パスに変換
         const inputDir = path.resolve(process.cwd(), "input");
