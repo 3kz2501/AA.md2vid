@@ -1,0 +1,64 @@
+services:
+  # VOICEVOX Engine (Text-to-Speech)
+  voicevox:
+    image: voicevox/voicevox_engine:cpu-latest
+    container_name: aa-md2vid-voicevox
+    ports:
+      - "50021:50021"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:50021/version"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # AA.md2vid Main Container
+  aa-md2vid:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: aa-md2vid-app
+    depends_on:
+      voicevox:
+        condition: service_healthy
+    environment:
+      - VOICEVOX_ENDPOINT=http://voicevox:50021
+      - NODE_ENV=production
+    volumes:
+      # Input files (manuscripts, slides, images)
+      - ./input:/app/input
+      # Output directory
+      - ./out:/app/out
+      # Generated voices (optional, for caching)
+      - ./public/voices:/app/public/voices
+      # BGM files
+      - ./public/bgm:/app/public/bgm
+      # Custom fonts (if any)
+      - ./public/fonts:/app/public/fonts
+    ports:
+      - "3000:3000"
+    stdin_open: true
+    tty: true
+    # Keep container running for exec commands
+    command: ["tail", "-f", "/dev/null"]
+
+  # Optional: One-shot render service
+  render:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      voicevox:
+        condition: service_healthy
+    environment:
+      - VOICEVOX_ENDPOINT=http://voicevox:50021
+    volumes:
+      - ./input:/app/input
+      - ./out:/app/out
+      - ./public/voices:/app/public/voices
+      - ./public/bgm:/app/public/bgm
+      - ./public/fonts:/app/public/fonts
+    profiles:
+      - render
+    command: ["npm", "run", "render"]
