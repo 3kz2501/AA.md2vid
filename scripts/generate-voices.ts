@@ -5,7 +5,7 @@
 
 import fs from "fs";
 import path from "path";
-import { loadConfig, getCharacterConfig } from "../src/config.js";
+import { loadConfig, getCharacterConfig, getVoicevoxEndpoint } from "../src/config.js";
 import type { ScriptData, DurationsJson } from "../src/types.js";
 
 const VOICES_DIR = path.resolve(process.cwd(), "public/voices");
@@ -55,7 +55,7 @@ async function generateVoice(
   outputPath: string,
   config: ReturnType<typeof loadConfig>
 ): Promise<number> {
-  const endpoint = config.voicevox.endpoint;
+  const endpoint = getVoicevoxEndpoint();
 
   // 1. Audio Query を取得
   const queryUrl = `${endpoint}/audio_query?text=${encodeURIComponent(text)}&speaker=${speakerId}`;
@@ -131,13 +131,14 @@ async function main() {
   }
 
   // VOICEVOX 接続確認
+  const voicevoxEndpoint = getVoicevoxEndpoint();
   try {
-    const res = await fetch(`${config.voicevox.endpoint}/version`);
+    const res = await fetch(`${voicevoxEndpoint}/version`);
     if (!res.ok) throw new Error("Connection failed");
     const version = await res.text();
     console.log(`  VOICEVOX Engine: ${version}`);
   } catch (error) {
-    console.error(`Error: VOICEVOX に接続できません (${config.voicevox.endpoint})`);
+    console.error(`Error: VOICEVOX に接続できません (${voicevoxEndpoint})`);
     console.error("  VOICEVOX を起動してから再実行してください");
     process.exit(1);
   }

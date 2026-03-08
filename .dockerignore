@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+
+# Output
+out/
+
+# Generated files
+public/voices/
+src/data/script.ts
+
+# Git
+.git/
+.gitignore
+
+# Documentation
+*.md
+!package.md
+docs/
+
+# MCP server (not needed in container)
+mcp-server/
+
+# IDE
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.log
+*.tmp

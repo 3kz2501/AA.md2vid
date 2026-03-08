@@ -34,7 +34,8 @@ export function getCharacterConfig(name: string) {
 }
 
 export function getVoicevoxEndpoint(): string {
-  return loadConfig().voicevox.endpoint;
+  // Environment variable takes precedence (for Docker)
+  return process.env.VOICEVOX_ENDPOINT || loadConfig().voicevox.endpoint;
 }
 
 export function getVideoConfig() {
