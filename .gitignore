@@ -23,9 +23,6 @@ input/slides/*
 public/bgm/*
 !public/bgm/.gitkeep
 
-# Development docs
-docs/
-
 # Character MLT (development)
 characters/mlt/
 
