@@ -15,12 +15,39 @@ Markdownで台本を書くだけで、やる夫・やらない夫が掛け合い
 ## 必要環境
 
 - **Node.js** 18以上
+- **Chromium** (Marp CLIのPNG生成に必要)
 - **VOICEVOX** (音声合成エンジン)
-  - [VOICEVOX公式サイト](https://voicevox.hiroshiba.jp/)からダウンロード
-- **Marp CLI** (スライド画像化、npm devDependenciesに含む)
-  - スライドPNG生成にはブラウザ（Chrome/Chromium）が必要
+- **ffmpeg** (動画レンダリングに必要)
 
 ## インストール
+
+### 1. システム依存ツール（Ubuntu/Debian）
+
+```bash
+# Chromium依存ライブラリ
+sudo apt-get update && sudo apt-get install -y \
+  libnspr4 libnss3 libatk1.0-0 libatk-bridge2.0-0 libcups2 \
+  libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 \
+  libxrandr2 libgbm1 libasound2t64
+
+# Chromium (Marp CLIのPNG生成に必要)
+sudo apt install chromium-browser
+
+# ffmpeg (Remotionのレンダリングに必要)
+sudo apt install ffmpeg
+```
+
+### 2. VOICEVOX
+
+[VOICEVOX公式サイト](https://voicevox.hiroshiba.jp/)からダウンロード。
+
+```bash
+# 起動
+cd ${VOICEBOX_DIR}/VOICEVOX/vv-engine
+./run # http://localhost:50021 でAPIが利用可能
+```
+
+### 3. プロジェクト
 
 ```bash
 git clone https://github.com/3kz2501/AA.md2vid.git
@@ -101,15 +128,15 @@ style: |
 
 Marp CLIでスライドをPNG画像に変換します。
 
-```bash
-# Windows (PowerShell)
-npx @marp-team/marp-cli input/slides/example.md --images png -o input/slides/example/slide
+> **Note**: Marp CLIは絶対パスが必要です。
 
-# WSL/Linux
-npx @marp-team/marp-cli input/slides/example.md --images png -o input/slides/example/slide
+```bash
+npx @marp-team/marp-cli "$(pwd)/input/slides/example.md" --images png -o "$(pwd)/input/slides/example/slide"
 ```
 
 出力: `input/slides/example/slide_001.png`, `slide_002.png`, ...
+
+- 出力されたPNG のスライド番号を台本の中で関連する会話の手前に`@slide1` のように記載すると画面中央にスライドが表示されます。
 
 ### Step 5: プリプロセス（必須）
 
@@ -119,6 +146,7 @@ npm run preprocess -- --manuscript example
 ```
 
 **プリプロセスの処理内容:**
+
 1. 指定した台本（`input/manuscripts/example.md`）をパース
 2. VOICEVOXで各セリフの音声ファイルを生成（`public/voices/`）
 3. スクリプトデータを出力（`src/data/script.ts`）
@@ -166,16 +194,16 @@ npm run build
 ```yaml
 ---
 title: 動画タイトル
-bgm: bgm/bgm_file.mp3           # BGMファイル（public/配下）
-slides: slides/slide_file.md     # スライドファイル
+bgm: bgm/bgm_file.mp3 # BGMファイル（public/配下）
+slides: slides/slide_file.md # スライドファイル
 characters:
   - name: やる夫
-    voiceId: 3                   # VOICEVOX話者ID
-    direction: left              # 画面配置（left/right）
+    voiceId: 3 # VOICEVOX話者ID
+    direction: left # 画面配置（left/right）
   - name: やらない夫
     voiceId: 13
     direction: right
-pronunciations:                  # 読み替え辞書
+pronunciations: # 読み替え辞書
   "難読語": "読み方"
 ---
 ```
@@ -203,37 +231,37 @@ pronunciations:                  # 読み替え辞書
 
 ### やる夫
 
-| タグ | 説明 |
-|------|------|
-| `normal` | 通常（デフォルト） |
-| `happy` | 喜び |
-| `sad` | 悲しみ |
-| `cry` | 泣き |
-| `angry` | 怒り |
-| `surprised` | 驚き |
-| `troubled` | 困惑 |
-| `shy` | 照れ |
-| `grit` | 歯を食いしばる |
-| `dead` | 死んだ目 |
-| `wink` | ウインク |
+| タグ        | 説明               |
+| ----------- | ------------------ |
+| `normal`    | 通常（デフォルト） |
+| `happy`     | 喜び               |
+| `sad`       | 悲しみ             |
+| `cry`       | 泣き               |
+| `angry`     | 怒り               |
+| `surprised` | 驚き               |
+| `troubled`  | 困惑               |
+| `shy`       | 照れ               |
+| `grit`      | 歯を食いしばる     |
+| `dead`      | 死んだ目           |
+| `wink`      | ウインク           |
 
 ### やらない夫
 
-| タグ | 説明 |
-|------|------|
-| `normal` | 通常（デフォルト） |
-| `explain` | 説明 |
-| `happy` | 喜び |
-| `happy2` | 喜び2 |
-| `sad` | 悲しみ |
-| `despair` | 絶望 |
-| `angry` | 怒り |
-| `thinking` | 考え中 |
-| `question` | 疑問 |
-| `pointing` | 指差し |
-| `waving` | 手を振る |
-| `arms_crossed` | 腕組み |
-| `casual` | カジュアル |
+| タグ           | 説明               |
+| -------------- | ------------------ |
+| `normal`       | 通常（デフォルト） |
+| `explain`      | 説明               |
+| `happy`        | 喜び               |
+| `happy2`       | 喜び2              |
+| `sad`          | 悲しみ             |
+| `despair`      | 絶望               |
+| `angry`        | 怒り               |
+| `thinking`     | 考え中             |
+| `question`     | 疑問               |
+| `pointing`     | 指差し             |
+| `waving`       | 手を振る           |
+| `arms_crossed` | 腕組み             |
+| `casual`       | カジュアル         |
 
 ## ディレクトリ構成
 
@@ -282,10 +310,10 @@ bgm:
 
 ## VOICEVOX話者ID
 
-| キャラ | 推奨話者 | ID |
-|--------|---------|-----|
-| やる夫 | ずんだもん（ノーマル） | 3 |
-| やらない夫 | 玄野武宏（ノーマル） | 11 |
+| キャラ     | 推奨話者               | ID  |
+| ---------- | ---------------------- | --- |
+| やる夫     | ずんだもん（ノーマル） | 3   |
+| やらない夫 | 玄野武宏（ノーマル）   | 11  |
 
 他の話者は VOICEVOX起動後 `http://localhost:50021/speakers` で確認できます。
 
@@ -304,10 +332,10 @@ VOICEVOXで生成した音声を利用する際は、以下を遵守してくだ
 
 #### 推奨話者の利用規約
 
-| 話者 | ID | 商用利用 | クレジット | 備考 |
-|------|-----|---------|-----------|------|
-| ずんだもん | 3 | 可 | VOICEVOX:ずんだもん | [利用規約](https://zunko.jp/con_ongen_kiyaku.html) |
-| 玄野武宏 | 11 | 可 | VOICEVOX:玄野武宏(CV:ガロ) | [利用規約](https://www.virvoxproject.com/voicevox%E3%81%AE%E5%88%A9%E7%94%A8%E8%A6%8F%E7%B4%84) |
+| 話者       | ID  | 商用利用 | クレジット                 | 備考                                                                                            |
+| ---------- | --- | -------- | -------------------------- | ----------------------------------------------------------------------------------------------- |
+| ずんだもん | 3   | 可       | VOICEVOX:ずんだもん        | [利用規約](https://zunko.jp/con_ongen_kiyaku.html)                                              |
+| 玄野武宏   | 11  | 可       | VOICEVOX:玄野武宏(CV:ガロ) | [利用規約](https://www.virvoxproject.com/voicevox%E3%81%AE%E5%88%A9%E7%94%A8%E8%A6%8F%E7%B4%84) |
 
 詳細: [VOICEVOXソフトウェア利用規約](https://voicevox.hiroshiba.jp/term/)
 
@@ -318,11 +346,11 @@ VOICEVOXで生成した音声を利用する際は、以下を遵守してくだ
 
 ### その他のライブラリ・素材
 
-| ライブラリ | ライセンス | 備考 |
-|-----------|-----------|------|
-| [Marp](https://marp.app/) | MIT | スライド生成 |
-| [aahub_light](https://fonts.aahub.org/) | - | AA表示用フォント |
-| [Noto Sans JP](https://fonts.google.com/noto/specimen/Noto+Sans+JP) | OFL | 字幕用フォント |
+| ライブラリ                                                          | ライセンス | 備考             |
+| ------------------------------------------------------------------- | ---------- | ---------------- |
+| [Marp](https://marp.app/)                                           | MIT        | スライド生成     |
+| [aahub_light](https://fonts.aahub.org/)                             | -          | AA表示用フォント |
+| [Noto Sans JP](https://fonts.google.com/noto/specimen/Noto+Sans+JP) | OFL        | 字幕用フォント   |
 
 ### クレジット表記例
 
