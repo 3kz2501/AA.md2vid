@@ -11,8 +11,8 @@ characters:
     direction: right
 # 読み替え辞書（長いパターンから順に適用）
 pronunciations:
-  "API": "エーピーアイ"
-  "JSON": "ジェイソン"
+  "やらない夫": "やらないお"
+  "やる夫": "やるお"
 ---
 
 @slide 1
@@ -28,6 +28,9 @@ pronunciations:
 [やらない夫:thinking] 考えながら話すセリフだな。
 
 # 使用可能な感情タグ
+
 # やる夫: normal, happy, sad, cry, angry, surprised, troubled, shy, grit, dead, wink
+
 # やらない夫: normal, explain, happy, happy2, sad, despair, angry, surprised, troubled,
-#            thinking, question, pointing, waving, arms_crossed, casual
+
+# thinking, question, pointing, waving, arms_crossed, casual

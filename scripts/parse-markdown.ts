@@ -266,9 +266,24 @@ function resolveSlideFile(slidesRef: string, manuscriptPath: string): string | n
  */
 function findManuscriptFile(arg?: string): string {
   if (arg) {
-    const filePath = path.isAbsolute(arg) ? arg : path.resolve(process.cwd(), arg);
-    if (fs.existsSync(filePath)) {
-      return filePath;
+    // 絶対パス
+    if (path.isAbsolute(arg) && fs.existsSync(arg)) {
+      return arg;
+    }
+    // 相対パス（カレントディレクトリから）
+    const fromCwd = path.resolve(process.cwd(), arg);
+    if (fs.existsSync(fromCwd)) {
+      return fromCwd;
+    }
+    // input/manuscripts/ 内を検索
+    const inManuscripts = path.resolve(MANUSCRIPTS_DIR, arg);
+    if (fs.existsSync(inManuscripts)) {
+      return inManuscripts;
+    }
+    // 旧ディレクトリ内を検索
+    const inLegacy = path.resolve(LEGACY_MANUSCRIPTS_DIR, arg);
+    if (fs.existsSync(inLegacy)) {
+      return inLegacy;
     }
     throw new Error(`ファイルが見つかりません: ${arg}`);
   }
@@ -293,14 +308,39 @@ function findManuscriptFile(arg?: string): string {
 }
 
 /**
+ * 引数をパース
+ */
+function parseArgs(): string | undefined {
+  const args = process.argv.slice(2);
+
+  for (let i = 0; i < args.length; i++) {
+    if (args[i] === "--manuscript" && args[i + 1]) {
+      const name = args[i + 1];
+      // 拡張子がなければ追加
+      return name.endsWith(".md") ? name : `${name}.md`;
+    }
+    // --manuscript=value 形式
+    if (args[i].startsWith("--manuscript=")) {
+      const name = args[i].split("=")[1];
+      return name.endsWith(".md") ? name : `${name}.md`;
+    }
+    // フラグなしの引数（後方互換）
+    if (!args[i].startsWith("-")) {
+      return args[i];
+    }
+  }
+  return undefined;
+}
+
+/**
  * メイン処理
  */
 async function main() {
-  const args = process.argv.slice(2);
+  const manuscriptArg = parseArgs();
 
   let mdPath: string;
   try {
-    mdPath = findManuscriptFile(args[0]);
+    mdPath = findManuscriptFile(manuscriptArg);
   } catch (e) {
     console.error(`Error: ${(e as Error).message}`);
     process.exit(1);

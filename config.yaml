@@ -12,7 +12,7 @@ voicevox:
     volumeScale: 1.0
 
 audio:
-  voiceVolume: 2.0
+  voiceVolume: 2.5
 # 動画出力設定
 video:
   width: 1920
@@ -107,7 +107,7 @@ emotionKeywords:
 
 # BGM設定
 bgm:
-  volume: 0.15
+  volume: 0.13
   fadeOutDuration: 30 # フレーム数
 
 # 背景設定

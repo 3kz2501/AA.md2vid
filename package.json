@@ -14,7 +14,7 @@
   },
   "type": "module",
   "scripts": {
-    "preprocess": "tsx scripts/parse-markdown.ts && tsx scripts/generate-voices.ts",
+    "preprocess": "tsx scripts/preprocess.ts",
     "parse-mlt": "tsx scripts/parse-mlt.ts",
     "parse-md": "tsx scripts/parse-markdown.ts",
     "voices": "tsx scripts/generate-voices.ts",
